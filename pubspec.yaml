@@ -1,7 +1,7 @@
 name: logkeeper
 description: Simple file logger that works out of the box with automatic timestamping and session management.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/RaulCatalinas/Logkeeper
 
 environment:
   sdk: ^3.9.2
