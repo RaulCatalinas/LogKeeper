@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="logkeeper API docs, for the Dart programming language.">
+  <title>logkeeper - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">logkeeper package</li>
+  </ol>
+  <div class="self-name">logkeeper</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="logkeeper">LogKeeper</h1>
+<p>A simple, plug-and-play file logger for Dart with automatic timestamping and session management.</p>
+<h2 id="features">Features</h2>
+<p>✨ <strong>Zero Configuration</strong> - Works out of the box, no setup required
+📁 <strong>Automatic File Management</strong> - Creates timestamped log files for each session
+⏰ <strong>Built-in Timestamps</strong> - Every log entry includes automatic timestamping
+🎯 <strong>Simple API</strong> - Clean, intuitive methods for different log levels
+💾 <strong>Persistent Logging</strong> - All logs are saved to disk automatically</p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="installation">Installation</h3>
+<p>Add this to your package's <code>pubspec.yaml</code> file:</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  logkeeper: ^1.0.0
+</code></pre>
+<p>Then run:</p>
+<pre class="language-bash"><code class="language-bash">dart pub get
+</code></pre>
+<p>Or with Flutter:</p>
+<pre class="language-bash"><code class="language-bash">flutter pub get
+</code></pre>
+<h3 id="basic-usage">Basic Usage</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
+
+void main() async {
+  // Log different levels of messages
+  LogKeeper.info('Application started');
+  LogKeeper.warning('Low memory detected');
+  LogKeeper.error('Connection failed');
+  LogKeeper.critical('System failure');
+
+  // Save and close log file when done
+  await LogKeeper.saveLogs();
+}
+</code></pre>
+<p>That's it! LogKeeper will automatically create a <code>logs/</code> directory and save all your logs.</p>
+<h2 id="log-levels">Log Levels</h2>
+<p>LogKeeper supports four log levels:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Use Case</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>info()</code></td>
+<td>General information</td>
+<td><code>LogKeeper.info('User logged in')</code></td>
+</tr>
+<tr>
+<td><code>warning()</code></td>
+<td>Potentially harmful situations</td>
+<td><code>LogKeeper.warning('Disk space low')</code></td>
+</tr>
+<tr>
+<td><code>error()</code></td>
+<td>Error events</td>
+<td><code>LogKeeper.error('Network timeout')</code></td>
+</tr>
+<tr>
+<td><code>critical()</code></td>
+<td>Severe errors</td>
+<td><code>LogKeeper.critical('Database corrupted')</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="log-file-format">Log File Format</h2>
+<p>Log files are created in the <code>logs/</code> directory with the format:</p>
+<pre class="language-dart"><code>logs/
+└── 2025-10-18_14-30-45.log
+</code></pre>
+<p>Each log entry follows this format:</p>
+<pre class="language-dart"><code>[14:30:45] INFO: Application started
+[14:30:46] WARNING: Low memory detected
+[14:30:47] ERROR: Connection failed
+</code></pre>
+<h2 id="complete-example">Complete Example</h2>
+<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
+
+Future&lt;void&gt; main() async {
+  LogKeeper.info('Starting application...');
+
+  try {
+    // Your application logic
+    await connectToDatabase();
+    LogKeeper.info('Database connection established');
+
+    await loadUserData();
+    LogKeeper.info('User data loaded successfully');
+
+  } catch (e) {
+    LogKeeper.error('Failed to initialize: $e');
+  } finally {
+    LogKeeper.info('Shutting down application');
+    await LogKeeper.saveLogs();
+  }
+}
+
+Future&lt;void&gt; connectToDatabase() async {
+  // Database connection logic
+}
+
+Future&lt;void&gt; loadUserData() async {
+  // Load user data logic
+}
+</code></pre>
+<h2 id="best-practices">Best Practices</h2>
+<h3 id="always-save-logs">Always Save Logs</h3>
+<p>Remember to call <code>saveLogs()</code> before your application exits to ensure all logs are written to disk:</p>
+<pre class="language-dart"><code class="language-dart">void main() async {
+  LogKeeper.info('App started');
+  // ... your code ...
+  await LogKeeper.saveLogs();
+}
+</code></pre>
+<h3 id="use-appropriate-log-levels">Use Appropriate Log Levels</h3>
+<p>Choose the right log level for each situation:</p>
+<ul>
+<li><strong>INFO</strong>: Normal operations, state changes, milestones</li>
+<li><strong>WARNING</strong>: Unusual situations that don't prevent functionality</li>
+<li><strong>ERROR</strong>: Errors that affect functionality but allow recovery</li>
+<li><strong>CRITICAL</strong>: Severe errors requiring immediate attention</li>
+</ul>
+<h3 id="be-descriptive">Be Descriptive</h3>
+<p>Write clear, actionable log messages:</p>
+<pre class="language-dart"><code class="language-dart">// ❌ Bad
+LogKeeper.error('Error');
+
+// ✅ Good
+LogKeeper.error('Failed to connect to database: connection timeout after 30s');
+</code></pre>
+<h2 id="faq">FAQ</h2>
+<h3 id="where-are-log-files-stored">Where are log files stored?</h3>
+<p>Log files are stored in a <code>logs/</code> directory relative to your application's working directory.</p>
+<h3 id="can-i-change-the-log-directory">Can I change the log directory?</h3>
+<p>Currently, LogKeeper uses a fixed <code>logs/</code> directory. Custom directory support may be added in a future version.</p>
+<h3 id="how-are-log-files-named">How are log files named?</h3>
+<p>Log files use the format <code>yyyy-MM-dd_HH-mm-ss.log</code> based on when the logger is initialized.</p>
+<h3 id="what-happens-if-i-dont-call-savelogs">What happens if I don't call <code>saveLogs()</code>?</h3>
+<p>Some log entries may not be written to disk as they remain in the buffer. Always call <code>saveLogs()</code> before exiting.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<h2 id="license">License</h2>
+<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+<h2 id="support">Support</h2>
+<p>If you encounter any issues or have questions, please <a href="https://github.com/RaulCatalinas/Logkeeper/issues">open an issue</a> on GitHub.</p>
+<h2 id="changelog">Changelog</h2>
+<p>See <a href="CHANGELOG.md">CHANGELOG.md</a> for a list of changes in each version.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="logkeeper">
+  <span class="name"><a href="package-package_logkeeper/">logkeeper</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">logkeeper package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">logkeeper</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="package-package_logkeeper/">logkeeper</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    logkeeper
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
