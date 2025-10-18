@@ -32,12 +32,8 @@ class LogKeeper {
   static final _writeLogsTimestampFormatter = DateFormat.Hms();
   static final _filenameTimestampFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
 
-  static final _filenameTimestamp = _filenameTimestampFormatter.format(
-    DateTime.now(),
-  );
-
-  static final _logDir = Directory('logs');
-  static final _logFile = File(join(_logDir.path, '$_filenameTimestamp.log'));
+  late final Directory _logDir;
+  late final File _logFile;
 
   IOSink? _sink;
 
@@ -50,6 +46,13 @@ class LogKeeper {
   }
 
   void _initializeLogger() {
+    final filenameTimestamp = _filenameTimestampFormatter.format(
+      DateTime.now(),
+    );
+
+    _logDir = Directory('logs');
+    _logFile = File(join(_logDir.path, '$filenameTimestamp.log'));
+
     _logFile.createSync(recursive: true);
     _sink = _logFile.openWrite(mode: FileMode.append, encoding: utf8);
   }
@@ -126,7 +129,11 @@ class LogKeeper {
   /// Returns a [Future] that completes when the log file has been
   /// flushed and closed.
   static Future<void> saveLogs() async {
-    await _instance._sink?.flush();
-    await _instance._sink?.close();
+    if (_instance._sink != null) {
+      await _instance._sink!.flush();
+      await _instance._sink!.close();
+
+      _instance._sink = null;
+    }
   }
 }
