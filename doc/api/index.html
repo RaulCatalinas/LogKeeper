@@ -77,6 +77,96 @@ void main() async {
   await LogKeeper.saveLogs();
 }
 </code></pre>
+<h2 id="complete-example">Complete Example</h2>
+<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
+
+Future&lt;void&gt; main() async {
+  LogKeeper.info('Starting application...');
+
+  try {
+    // Your application logic
+    await connectToDatabase();
+    LogKeeper.info('Database connection established');
+
+    await loadUserData();
+    LogKeeper.info('User data loaded successfully');
+
+  } catch (e) {
+    LogKeeper.error('Failed to initialize: $e');
+  } finally {
+    LogKeeper.info('Shutting down application');
+    await LogKeeper.saveLogs();
+  }
+}
+
+Future&lt;void&gt; connectToDatabase() async {
+  // Database connection logic
+}
+
+Future&lt;void&gt; loadUserData() async {
+  // Load user data logic
+}
+</code></pre>
+<h2 id="additional-examples">Additional Examples</h2>
+<h3 id="-zero-config-session-example">🔹 Zero-Config Session Example</h3>
+<p>Demonstrates how LogKeeper automatically manages timestamped sessions
+and creates log files without any setup:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
+
+Future&lt;void&gt; main() async {
+  LogKeeper.info('Starting new log session');
+  LogKeeper.warning('Cache directory not found, recreating...');
+  LogKeeper.error('Failed to load preferences.json');
+  LogKeeper.critical('Disk nearly full — user intervention required!');
+
+  await LogKeeper.saveLogs();
+  print('✅ Logs saved automatically in the "logs" directory.');
+}
+</code></pre>
+<h2 id="-integration-example">🔹 Integration Example</h2>
+<p>Shows how LogKeeper can be used in a realistic app lifecycle,
+including async operations and error handling:</p>
+<pre class="language-dart"><code class="language-dart">import 'dart:math';
+
+import 'package:logkeeper/logkeeper.dart';
+
+Future&lt;void&gt; main() async {
+  LogKeeper.info('App started');
+  try {
+    await loadConfiguration();
+    await fetchUserData();
+    await performRiskyOperation();
+    LogKeeper.info('All tasks completed successfully');
+  } catch (e, s) {
+    LogKeeper.critical('Unhandled exception: $e\n$s');
+  } finally {
+    await LogKeeper.saveLogs();
+    print('✅ Log file saved in the "logs" directory.');
+  }
+}
+
+Future&lt;void&gt; loadConfiguration() async {
+  LogKeeper.info('Loading configuration...');
+  await Future.delayed(Duration(milliseconds: 500));
+  LogKeeper.warning('Using default configuration (config.json missing)');
+}
+
+Future&lt;void&gt; fetchUserData() async {
+  LogKeeper.info('Fetching user data...');
+  await Future.delayed(Duration(milliseconds: 700));
+  if (Random().nextBool()) {
+    LogKeeper.error('Failed to reach API endpoint — retrying...');
+  }
+}
+
+Future&lt;void&gt; performRiskyOperation() async {
+  LogKeeper.info('Performing risky operation...');
+  await Future.delayed(Duration(milliseconds: 400));
+  if (Random().nextInt(10) &gt; 7) {
+    throw Exception('Critical system failure during operation');
+  }
+}
+</code></pre>
 <p>That's it! LogKeeper will automatically create a <code>logs/</code> directory and save all your logs.</p>
 <h2 id="log-levels">Log Levels</h2>
 <p>LogKeeper supports four log levels:</p>
@@ -120,36 +210,6 @@ void main() async {
 <pre class="language-dart"><code>[14:30:45] INFO: Application started
 [14:30:46] WARNING: Low memory detected
 [14:30:47] ERROR: Connection failed
-</code></pre>
-<h2 id="complete-example">Complete Example</h2>
-<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
-
-Future&lt;void&gt; main() async {
-  LogKeeper.info('Starting application...');
-
-  try {
-    // Your application logic
-    await connectToDatabase();
-    LogKeeper.info('Database connection established');
-
-    await loadUserData();
-    LogKeeper.info('User data loaded successfully');
-
-  } catch (e) {
-    LogKeeper.error('Failed to initialize: $e');
-  } finally {
-    LogKeeper.info('Shutting down application');
-    await LogKeeper.saveLogs();
-  }
-}
-
-Future&lt;void&gt; connectToDatabase() async {
-  // Database connection logic
-}
-
-Future&lt;void&gt; loadUserData() async {
-  // Load user data logic
-}
 </code></pre>
 <h2 id="best-practices">Best Practices</h2>
 <h3 id="always-save-logs">Always Save Logs</h3>
@@ -200,7 +260,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
           <h2>Libraries</h2>
         <dl>
           <dt id="logkeeper">
-  <span class="name"><a href="package-package_logkeeper/">logkeeper</a></span> 
+  <span class="name"><a href="logkeeper/">logkeeper</a></span> 
 
 </dt>
 <dd>
@@ -223,7 +283,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
     <h5 class="hidden-xs"><span class="package-name">logkeeper</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
-      <li><a href="package-package_logkeeper/">logkeeper</a></li>
+      <li><a href="logkeeper/">logkeeper</a></li>
 </ol>
 
   </div>
@@ -233,7 +293,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
 <footer>
   <span class="no-break">
     logkeeper
-      1.0.0
+      1.0.0+1
   </span>
   
 </footer>
