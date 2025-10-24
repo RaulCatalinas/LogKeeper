@@ -1,9 +1,11 @@
 enum LogLevel {
-  info('INFO'),
-  warning('WARNING'),
-  error('ERROR'),
-  critical('CRITICAL');
+  info,
+  warning,
+  error,
+  critical;
 
-  const LogLevel(this.value);
-  final String value;
+  int get value => index;
+
+  @override
+  String toString() => name.toUpperCase();
 }

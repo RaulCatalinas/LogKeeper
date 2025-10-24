@@ -1,66 +1,75 @@
-import 'dart:convert' show utf8;
-import 'dart:io' show Directory, File, FileMode, IOSink;
+import 'dart:io' show Directory;
 
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:path/path.dart' show join;
 
-import 'log_level.dart' show LogLevel;
+import 'file_manager.dart';
+import 'log_level.dart';
 
-/// A simple file logger with automatic timestamping and session management.
-///
-/// LogKeeper provides a plug-and-play logging solution that automatically
-/// writes timestamped log entries to disk. Each session creates a new log file
-/// with a timestamp-based filename.
-///
-/// Example usage:
-/// ```dart
-/// LogKeeper.info('Application started');
-/// LogKeeper.warning('Low memory detected');
-/// LogKeeper.error('Connection failed');
-/// LogKeeper.critical('System failure');
-///
-/// // Save and close log file when done
-/// await LogKeeper.saveLogs();
-/// ```
-///
-/// Log files are stored in a `logs/` directory relative to the application's
-/// working directory. Each log file is named with the format:
-/// `yyyy-MM-dd_HH-mm-ss.log`
 class LogKeeper {
-  static final _instance = LogKeeper._internal();
+  static final LogKeeper _instance = LogKeeper._internal();
+  DateFormat _timestampFormatter = DateFormat.Hms();
+  DateFormat _filenameFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
+  Directory _logDir = Directory("logs");
+  LogLevel _minLevelForProduction = LogLevel.info;
+  bool _writeToFileInDevMode = false;
+  int? _maxFileSizeMB;
+  int? _maxLogAgeDays;
 
-  static final _writeLogsTimestampFormatter = DateFormat.Hms();
-  static final _filenameTimestampFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
+  late final FileManager _fileManager;
 
-  late final Directory _logDir;
-  late final File _logFile;
-
-  IOSink? _sink;
-
-  factory LogKeeper() {
-    return _instance;
-  }
+  factory LogKeeper() => _instance;
 
   LogKeeper._internal() {
-    _initializeLogger();
+    _fileManager = FileManager(
+      logDir: _logDir,
+      filenameFormatter: _filenameFormatter,
+      maxFileSizeMB: _maxFileSizeMB,
+      maxLogAgeDays: _maxLogAgeDays,
+    );
   }
 
-  void _initializeLogger() {
-    final filenameTimestamp = _filenameTimestampFormatter.format(
-      DateTime.now(),
+  /// Optional configuration. If not called, sensible defaults are used.
+  static void configure({
+    String logDirectory = "logs",
+    LogLevel? minLevelForProduction,
+    int? maxFileSizeMB,
+    int? maxLogAgeDays,
+    DateFormat? fileNameDateFormat,
+    DateFormat? timestampFormat,
+    bool? writeToFileInDevMode,
+  }) {
+    _instance._logDir = Directory(logDirectory);
+    _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
+    _instance._maxFileSizeMB = maxFileSizeMB;
+    _instance._maxLogAgeDays = maxLogAgeDays;
+    _instance._filenameFormatter =
+        fileNameDateFormat ?? DateFormat('yyyy-MM-dd_HH-mm-ss');
+    _instance._timestampFormatter = timestampFormat ?? DateFormat.Hms();
+    _instance._writeToFileInDevMode = writeToFileInDevMode ?? false;
+
+    _instance._fileManager = FileManager(
+      logDir: _instance._logDir,
+      filenameFormatter: _instance._filenameFormatter,
+      maxFileSizeMB: _instance._maxFileSizeMB,
     );
-
-    _logDir = Directory('logs');
-    _logFile = File(join(_logDir.path, '$filenameTimestamp.log'));
-
-    _logFile.createSync(recursive: true);
-    _sink = _logFile.openWrite(mode: FileMode.append, encoding: utf8);
   }
 
-  static void _writeLog(LogLevel level, String message) {
-    _instance._sink?.writeln(
-      '[${_writeLogsTimestampFormatter.format(DateTime.now())}] ${level.value}: $message',
-    );
+  static void _writeLog(LogLevel level, String message) async {
+    final timestamp = _instance._timestampFormatter.format(DateTime.now());
+    final logEntry = '[$timestamp] ${level.toString()}: $message';
+
+    final shouldWriteToFile = kReleaseMode
+        ? level.value >= _instance._minLevelForProduction.value
+        : _instance._writeToFileInDevMode;
+
+    if (!kReleaseMode) {
+      print(logEntry);
+    }
+
+    if (shouldWriteToFile) {
+      await _instance._fileManager.write(logEntry);
+    }
   }
 
   /// Logs an informational message.
@@ -69,71 +78,64 @@ class LogKeeper {
   ///
   /// Example:
   /// ```dart
-  /// LogKeeper.info('User logged in successfully');
-  /// LogKeeper.info('Database connection established');
+  ///   LogKeeper.info('User logged in successfully');
+  ///   LogKeeper.info('Database connection established');
   /// ```
+  ///
   static void info(String message) => _writeLog(LogLevel.info, message);
 
   /// Logs a warning message.
   ///
-  /// Use this for potentially harmful situations that don't prevent
-  /// the application from functioning.
+  /// Use this for potentially harmful situations that don't prevent the application from functioning.
   ///
   /// Example:
   /// ```dart
-  /// LogKeeper.warning('Disk space running low');
-  /// LogKeeper.warning('API rate limit approaching');
-  /// ```
+  ///   LogKeeper.warning('Disk space running low');
+  ///   LogKeeper.warning('API rate limit approaching');
+  /// ````
+  ///
   static void warning(String message) => _writeLog(LogLevel.warning, message);
 
   /// Logs an error message.
   ///
-  /// Use this for error events that might still allow the application
-  /// to continue running.
+  /// Use this for error events that might still allow the application to continue running.
   ///
   /// Example:
   /// ```dart
-  /// LogKeeper.error('Failed to fetch user data');
-  /// LogKeeper.error('Network connection timeout');
+  ///   LogKeeper.error('Failed to fetch user data');
+  ///   LogKeeper.error('Network connection timeout');
   /// ```
+  ///
   static void error(String message) => _writeLog(LogLevel.error, message);
 
   /// Logs a critical message.
   ///
-  /// Use this for severe error events that will presumably lead the
-  /// application to abort or require immediate attention.
+  /// Use this for severe error events that will presumably lead the application to abort or require immediate attention.
   ///
   /// Example:
   /// ```dart
-  /// LogKeeper.critical('Database corruption detected');
-  /// LogKeeper.critical('Out of memory error');
+  ///   LogKeeper.critical('Database corruption detected');
+  ///   LogKeeper.critical('Out of memory error');
   /// ```
+  ///
   static void critical(String message) => _writeLog(LogLevel.critical, message);
 
   /// Flushes and closes the log file.
   ///
-  /// This method should be called when you're done logging, typically
-  /// before the application exits. It ensures all buffered log entries
-  /// are written to disk and the file handle is properly closed.
+  /// This method should be called when you're done logging, typically before the application exits.
+  ///
+  /// It ensures all buffered log entries are written to disk and the file handle is properly closed.
   ///
   /// Example:
-  /// ```dart
-  /// void main() async {
-  ///   LogKeeper.info('Application starting');
-  ///   // ... application logic ...
-  ///   LogKeeper.info('Application shutting down');
-  ///   await LogKeeper.saveLogs();
-  /// }
+  ///  ```dart
+  ///   void main() async {
+  ///     LogKeeper.info('Application starting');
+  ///     // ... application logic ...
+  ///     LogKeeper.info('Application shutting down');
+  ///     await LogKeeper.saveLogs();
+  ///   }
   /// ```
   ///
-  /// Returns a [Future] that completes when the log file has been
-  /// flushed and closed.
-  static Future<void> saveLogs() async {
-    if (_instance._sink != null) {
-      await _instance._sink!.flush();
-      await _instance._sink!.close();
-
-      _instance._sink = null;
-    }
-  }
+  /// Returns a [Future] that completes when the log file has been flushed and closed.
+  static Future<void> saveLogs() => _instance._fileManager.close();
 }
