@@ -10,7 +10,7 @@ class LogKeeper {
   static final LogKeeper _instance = LogKeeper._internal();
   DateFormat _timestampFormatter = DateFormat.Hms();
   DateFormat _filenameFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
-  Directory _logDir = Directory("logs");
+  Directory _logDir = Directory('logs');
   LogLevel _minLevelForProduction = LogLevel.info;
   bool _writeToFileInDevMode = false;
   int? _maxFileSizeMB;
@@ -31,7 +31,7 @@ class LogKeeper {
 
   /// Optional configuration. If not called, sensible defaults are used.
   static void configure({
-    String logDirectory = "logs",
+    String logDirectory = 'logs',
     LogLevel? minLevelForProduction,
     int? maxFileSizeMB,
     int? maxLogAgeDays,
