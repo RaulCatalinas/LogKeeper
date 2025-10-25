@@ -203,11 +203,11 @@ Future&lt;void&gt; performRiskyOperation() async {
 </table>
 <h2 id="log-file-format">Log File Format</h2>
 <p>Log files are created in the <code>logs/</code> directory with the format:</p>
-<pre class="language-dart"><code>logs/
+<pre class="language-plaintext"><code class="language-plaintext">logs/
 └── 2025-10-18_14-30-45.log
 </code></pre>
 <p>Each log entry follows this format:</p>
-<pre class="language-dart"><code>[14:30:45] INFO: Application started
+<pre class="language-plaintext"><code class="language-plaintext">[14:30:45] INFO: Application started
 [14:30:46] WARNING: Low memory detected
 [14:30:47] ERROR: Connection failed
 </code></pre>
@@ -259,6 +259,13 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
       <section class="summary">
           <h2>Libraries</h2>
         <dl>
+          <dt id="log_level">
+  <span class="name"><a href="log_level/">log_level</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="logkeeper">
   <span class="name"><a href="logkeeper/">logkeeper</a></span> 
 
@@ -283,6 +290,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
     <h5 class="hidden-xs"><span class="package-name">logkeeper</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
+      <li><a href="log_level/">log_level</a></li>
       <li><a href="logkeeper/">logkeeper</a></li>
 </ol>
 
@@ -293,7 +301,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
 <footer>
   <span class="no-break">
     logkeeper
-      1.0.0+1
+      1.1.0
   </span>
   
 </footer>

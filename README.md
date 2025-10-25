@@ -53,101 +53,64 @@ void main() async {
 ## Complete Example
 
 ```dart
+import 'package:intl/intl.dart';
+import 'package:logkeeper/log_level.dart';
 import 'package:logkeeper/logkeeper.dart';
 
+/// Example of how to use LogKeeper.
+///
+/// LogKeeper is a plug-and-play file logger for Dart and Flutter.
+/// It works out of the box, no configuration required.
+/// However, you can optionally customize its behavior if needed.
 Future<void> main() async {
-  LogKeeper.info('Starting application...');
+  // ─────────────────────────────
+  // 1️⃣ ZERO-CONFIGURATION USAGE
+  // ─────────────────────────────
+  //
+  // By default, LogKeeper:
+  // • Logs messages with timestamps.
+  // • Prints them to the console in development mode.
+  // • Saves them to 'cwd/logs' in production mode.
+  //
+  // No setup required — just call LogKeeper and you're done.
+  LogKeeper.info('Application started');
+  LogKeeper.warning('Low disk space detected');
+  LogKeeper.error('Failed to fetch user data');
+  LogKeeper.critical('Unexpected system failure');
 
-  try {
-    // Your application logic
-    await connectToDatabase();
-    LogKeeper.info('Database connection established');
+  // ─────────────────────────────
+  // 2️⃣ OPTIONAL CONFIGURATION
+  // ─────────────────────────────
+  //
+  // If you want more control, you can configure LogKeeper
+  // using LogKeeper.configure().
+  //
+  // All parameters are optional — if you omit them, defaults are used.
+  LogKeeper.configure(
+    logDirectory: 'custom_logs', // custom directory for logs
+    minLevelForProduction:
+        LogLevel.warning, // filter lower levels in production
+    maxFileSizeMB: 5, // auto-rotate files over 5 MB
+    fileNameDateFormat: DateFormat('yyyy_MM_dd-HH_mm'),
+    timestampFormat: DateFormat('HH:mm:ss.SSS'),
+    maxLogAgeDays: 7, // delete logs older than 7 days
+    writeToFileInDevMode: true, // also write to file in dev mode
+  );
 
-    await loadUserData();
-    LogKeeper.info('User data loaded successfully');
+  LogKeeper.info('Configuration applied');
+  LogKeeper.warning('Custom logging directory active');
+  LogKeeper.error('Simulated error event');
+  LogKeeper.critical('Simulated critical issue');
 
-  } catch (e) {
-    LogKeeper.error('Failed to initialize: $e');
-  } finally {
-    LogKeeper.info('Shutting down application');
-    await LogKeeper.saveLogs();
-  }
-}
-
-Future<void> connectToDatabase() async {
-  // Database connection logic
-}
-
-Future<void> loadUserData() async {
-  // Load user data logic
-}
-```
-
-## Additional Examples
-
-### 🔹 Zero-Config Session Example
-
-Demonstrates how LogKeeper automatically manages timestamped sessions
-and creates log files without any setup:
-
-```dart
-import 'package:logkeeper/logkeeper.dart';
-
-Future<void> main() async {
-  LogKeeper.info('Starting new log session');
-  LogKeeper.warning('Cache directory not found, recreating...');
-  LogKeeper.error('Failed to load preferences.json');
-  LogKeeper.critical('Disk nearly full — user intervention required!');
-
+  // ─────────────────────────────
+  // 3️⃣ CLEANUP AND SHUTDOWN
+  // ─────────────────────────────
+  //
+  // Always call saveLogs() when the app is about to exit
+  // to make sure all buffered logs are flushed to disk.
   await LogKeeper.saveLogs();
-  print('✅ Logs saved automatically in the "logs" directory.');
-}
-```
-## 🔹 Integration Example
 
-Shows how LogKeeper can be used in a realistic app lifecycle,
-including async operations and error handling:
-
-```dart
-import 'dart:math';
-
-import 'package:logkeeper/logkeeper.dart';
-
-Future<void> main() async {
-  LogKeeper.info('App started');
-  try {
-    await loadConfiguration();
-    await fetchUserData();
-    await performRiskyOperation();
-    LogKeeper.info('All tasks completed successfully');
-  } catch (e, s) {
-    LogKeeper.critical('Unhandled exception: $e\n$s');
-  } finally {
-    await LogKeeper.saveLogs();
-    print('✅ Log file saved in the "logs" directory.');
-  }
-}
-
-Future<void> loadConfiguration() async {
-  LogKeeper.info('Loading configuration...');
-  await Future.delayed(Duration(milliseconds: 500));
-  LogKeeper.warning('Using default configuration (config.json missing)');
-}
-
-Future<void> fetchUserData() async {
-  LogKeeper.info('Fetching user data...');
-  await Future.delayed(Duration(milliseconds: 700));
-  if (Random().nextBool()) {
-    LogKeeper.error('Failed to reach API endpoint — retrying...');
-  }
-}
-
-Future<void> performRiskyOperation() async {
-  LogKeeper.info('Performing risky operation...');
-  await Future.delayed(Duration(milliseconds: 400));
-  if (Random().nextInt(10) > 7) {
-    throw Exception('Critical system failure during operation');
-  }
+  print('✅ Logs saved successfully!');
 }
 ```
 
@@ -168,14 +131,14 @@ LogKeeper supports four log levels:
 
 Log files are created in the `logs/` directory with the format:
 
-```
+```plaintext
 logs/
 └── 2025-10-18_14-30-45.log
 ```
 
 Each log entry follows this format:
 
-```
+```plaintext
 [14:30:45] INFO: Application started
 [14:30:46] WARNING: Low memory detected
 [14:30:47] ERROR: Connection failed

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the critical method from the LogKeeper class, for the Dart programming language.">
-  <title>critical method - LogKeeper class - logkeeper library - Dart API</title>
+  <meta name="description" content="API docs for the toString method from the LogLevel enum, for the Dart programming language.">
+  <title>toString method - LogLevel enum - log_level library - Dart API</title>
 
 
   
@@ -25,11 +25,11 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">logkeeper</a></li>
-    <li><a href="../../logkeeper/">logkeeper.dart</a></li>
-    <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">critical static method</li>
+    <li><a href="../../log_level/">log_level.dart</a></li>
+    <li><a href="../../log_level/LogLevel.html">LogLevel</a></li>
+    <li class="self-crumb">toString method</li>
   </ol>
-  <div class="self-name">critical</div>
+  <div class="self-name">toString</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,36 +46,45 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="logkeeper&#47;LogKeeper-class-sidebar.html"
+    data-above-sidebar="log_level&#47;LogLevel-enum-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">critical</span> static method 
+<h1><span class="kind-method">toString</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype">void</span>
-<span class="name ">critical</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="critical-param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
-</ol>)
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+<span class="name ">toString</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
 <section class="desc markdown">
-  <p>Logs a critical message.</p>
-<p>Use this for severe error events that will presumably lead the application to abort or require immediate attention.</p>
-<p>Example:</p>
-<pre class="language-dart"><code class="language-dart">  LogKeeper.critical('Database corruption detected');
-  LogKeeper.critical('Out of memory error');
-</code></pre>
+  <p>A string representation of this object.</p>
+<p>Some classes have a default textual representation,
+often paired with a static <code>parse</code> function (like <a href="https://api.flutter.dev/flutter/dart-core/int/parse.html">int.parse</a>).
+These classes will provide the textual representation as
+their string representation.</p>
+<p>Other classes have no meaningful textual representation
+that a program will care about.
+Such classes will typically override <code>toString</code> to provide
+useful information when inspecting the object,
+mainly for debugging or logging.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static void critical(String message) =&gt; _writeLog(LogLevel.critical, message);</code></pre>
+  <pre class="language-dart"><code class="language-dart">@override
+String toString() =&gt; name.toUpperCase();</code></pre>
 </section>
 
 
@@ -89,12 +98,12 @@
 </header>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">logkeeper</a></li>
-    <li><a href="../../logkeeper/">logkeeper</a></li>
-    <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">critical static method</li>
+    <li><a href="../../log_level/">log_level</a></li>
+    <li><a href="../../log_level/LogLevel.html">LogLevel</a></li>
+    <li class="self-crumb">toString method</li>
 </ol>
 
-    <h5>LogKeeper class</h5>
+    <h5>LogLevel enum</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

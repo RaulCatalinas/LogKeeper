@@ -63,33 +63,24 @@
     
 <section class="desc markdown">
   <p>Flushes and closes the log file.</p>
-<p>This method should be called when you're done logging, typically
-before the application exits. It ensures all buffered log entries
-are written to disk and the file handle is properly closed.</p>
+<p>This method should be called when you're done logging, typically before the application exits.</p>
+<p>It ensures all buffered log entries are written to disk and the file handle is properly closed.</p>
 <p>Example:</p>
-<pre class="language-dart"><code class="language-dart">void main() async {
-  LogKeeper.info('Application starting');
-  // ... application logic ...
-  LogKeeper.info('Application shutting down');
-  await LogKeeper.saveLogs();
-}
+<pre class="language-dart"><code class="language-dart"> void main() async {
+   LogKeeper.info('Application starting');
+   // ... application logic ...
+   LogKeeper.info('Application shutting down');
+   await LogKeeper.saveLogs();
+ }
 </code></pre>
-<p>Returns a <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a> that completes when the log file has been
-flushed and closed.</p>
+<p>Returns a <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a> that completes when the log file has been flushed and closed.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; saveLogs() async {
-  if (_instance._sink != null) {
-    await _instance._sink!.flush();
-    await _instance._sink!.close();
-
-    _instance._sink = null;
-  }
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; saveLogs() =&gt; _instance._fileManager.close();</code></pre>
 </section>
 
 
@@ -117,7 +108,7 @@ flushed and closed.</p>
 <footer>
   <span class="no-break">
     logkeeper
-      1.0.0+1
+      1.1.0
   </span>
   
 </footer>

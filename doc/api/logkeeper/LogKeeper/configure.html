@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the critical method from the LogKeeper class, for the Dart programming language.">
-  <title>critical method - LogKeeper class - logkeeper library - Dart API</title>
+  <meta name="description" content="API docs for the configure method from the LogKeeper class, for the Dart programming language.">
+  <title>configure method - LogKeeper class - logkeeper library - Dart API</title>
 
 
   
@@ -27,9 +27,9 @@
     <li><a href="../../index.html">logkeeper</a></li>
     <li><a href="../../logkeeper/">logkeeper.dart</a></li>
     <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">critical static method</li>
+    <li class="self-crumb">configure static method</li>
   </ol>
-  <div class="self-name">critical</div>
+  <div class="self-name">configure</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -49,33 +49,57 @@
     data-above-sidebar="logkeeper&#47;LogKeeper-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">critical</span> static method 
+<h1><span class="kind-method">configure</span> static method 
 </h1></div>
 
     <section class="multi-line-signature">
       
 <span class="returntype">void</span>
-<span class="name ">critical</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="critical-param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
-</ol>)
+<span class="name ">configure</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="configure-param-logDirectory"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">logDirectory</span> = <span class="default-value">&#39;logs&#39;</span>, </span></li>
+<li><span class="parameter" id="configure-param-minLevelForProduction"><span class="type-annotation"><a href="../../log_level/LogLevel.html">LogLevel</a>?</span> <span class="parameter-name">minLevelForProduction</span>, </span></li>
+<li><span class="parameter" id="configure-param-maxFileSizeMB"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxFileSizeMB</span>, </span></li>
+<li><span class="parameter" id="configure-param-maxLogAgeDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxLogAgeDays</span>, </span></li>
+<li><span class="parameter" id="configure-param-fileNameDateFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">fileNameDateFormat</span>, </span></li>
+<li><span class="parameter" id="configure-param-timestampFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">timestampFormat</span>, </span></li>
+<li><span class="parameter" id="configure-param-writeToFileInDevMode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">writeToFileInDevMode</span>, </span></li>
+</ol>})
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Logs a critical message.</p>
-<p>Use this for severe error events that will presumably lead the application to abort or require immediate attention.</p>
-<p>Example:</p>
-<pre class="language-dart"><code class="language-dart">  LogKeeper.critical('Database corruption detected');
-  LogKeeper.critical('Out of memory error');
-</code></pre>
+  <p>Optional configuration. If not called, sensible defaults are used.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static void critical(String message) =&gt; _writeLog(LogLevel.critical, message);</code></pre>
+  <pre class="language-dart"><code class="language-dart">static void configure({
+  String logDirectory = &#39;logs&#39;,
+  LogLevel? minLevelForProduction,
+  int? maxFileSizeMB,
+  int? maxLogAgeDays,
+  DateFormat? fileNameDateFormat,
+  DateFormat? timestampFormat,
+  bool? writeToFileInDevMode,
+}) {
+  _instance._logDir = Directory(logDirectory);
+  _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
+  _instance._maxFileSizeMB = maxFileSizeMB;
+  _instance._maxLogAgeDays = maxLogAgeDays;
+  _instance._filenameFormatter =
+      fileNameDateFormat ?? DateFormat(&#39;yyyy-MM-dd_HH-mm-ss&#39;);
+  _instance._timestampFormatter = timestampFormat ?? DateFormat.Hms();
+  _instance._writeToFileInDevMode = writeToFileInDevMode ?? false;
+
+  _instance._fileManager = FileManager(
+    logDir: _instance._logDir,
+    filenameFormatter: _instance._filenameFormatter,
+    maxFileSizeMB: _instance._maxFileSizeMB,
+  );
+}</code></pre>
 </section>
 
 
@@ -91,7 +115,7 @@
     <li><a href="../../index.html">logkeeper</a></li>
     <li><a href="../../logkeeper/">logkeeper</a></li>
     <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">critical static method</li>
+    <li class="self-crumb">configure static method</li>
 </ol>
 
     <h5>LogKeeper class</h5>

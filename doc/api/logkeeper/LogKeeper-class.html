@@ -53,24 +53,6 @@
 </h1></div>
 
     
-<section class="desc markdown">
-  <p>A simple file logger with automatic timestamping and session management.</p>
-<p>LogKeeper provides a plug-and-play logging solution that automatically
-writes timestamped log entries to disk. Each session creates a new log file
-with a timestamp-based filename.</p>
-<p>Example usage:</p>
-<pre class="language-dart"><code class="language-dart">LogKeeper.info('Application started');
-LogKeeper.warning('Low memory detected');
-LogKeeper.error('Connection failed');
-LogKeeper.critical('System failure');
-
-// Save and close log file when done
-await LogKeeper.saveLogs();
-</code></pre>
-<p>Log files are stored in a <code>logs/</code> directory relative to the application's
-working directory. Each log file is named with the format:
-<code>yyyy-MM-dd_HH-mm-ss.log</code></p>
-</section>
 
 
 
@@ -122,7 +104,7 @@ working directory. Each log file is named with the format:
 
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
@@ -180,6 +162,19 @@ working directory. Each log file is named with the format:
   <section class="summary offset-anchor" id="static-methods">
     <h2>Static Methods</h2>
     <dl class="callables">
+        <dt id="configure" class="callable">
+  <span class="name"><a href="../logkeeper/LogKeeper/configure.html">configure</a></span><span class="signature">(<wbr>{<span class="parameter" id="configure-param-logDirectory"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">logDirectory</span> = <span class="default-value">&#39;logs&#39;</span>, </span><span class="parameter" id="configure-param-minLevelForProduction"><span class="type-annotation"><a href="../log_level/LogLevel.html">LogLevel</a>?</span> <span class="parameter-name">minLevelForProduction</span>, </span><span class="parameter" id="configure-param-maxFileSizeMB"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxFileSizeMB</span>, </span><span class="parameter" id="configure-param-maxLogAgeDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxLogAgeDays</span>, </span><span class="parameter" id="configure-param-fileNameDateFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">fileNameDateFormat</span>, </span><span class="parameter" id="configure-param-timestampFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">timestampFormat</span>, </span><span class="parameter" id="configure-param-writeToFileInDevMode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">writeToFileInDevMode</span></span>})
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Optional configuration. If not called, sensible defaults are used.
+  
+
+</dd>
+
         <dt id="critical" class="callable">
   <span class="name"><a href="../logkeeper/LogKeeper/critical.html">critical</a></span><span class="signature">(<wbr><span class="parameter" id="critical-param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span>)
     <span class="returntype parameter">&#8594; void</span>
@@ -272,7 +267,7 @@ working directory. Each log file is named with the format:
 <footer>
   <span class="no-break">
     logkeeper
-      1.0.0+1
+      1.1.0
   </span>
   
 </footer>
