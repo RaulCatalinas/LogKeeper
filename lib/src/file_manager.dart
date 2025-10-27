@@ -67,10 +67,7 @@ class FileManager {
   }
 
   Future<void> close() async {
-    if (_sink == null) return;
-
-    await _sink!.flush();
-    await _sink!.close();
-    _sink = null;
+    await _sink?.flush();
+    await _sink?.close();
   }
 }

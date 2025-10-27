@@ -1,13 +1,13 @@
 import 'dart:io' show Directory;
 
-import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter/foundation.dart' show kReleaseMode, visibleForTesting;
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'file_manager.dart';
 import 'log_level.dart';
 
 class LogKeeper {
-  static final LogKeeper _instance = LogKeeper._internal();
+  static LogKeeper _instance = LogKeeper._internal();
   DateFormat _timestampFormatter = DateFormat.Hms();
   DateFormat _filenameFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
   Directory _logDir = Directory('logs');
@@ -137,5 +137,11 @@ class LogKeeper {
   /// ```
   ///
   /// Returns a [Future] that completes when the log file has been flushed and closed.
-  static Future<void> saveLogs() => _instance._fileManager.close();
+  static Future<void> saveLogs() async => await _instance._fileManager.close();
+
+  @visibleForTesting
+  static void resetInstance() async {
+    await _instance._fileManager.close();
+    _instance = LogKeeper._internal();
+  }
 }
