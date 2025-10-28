@@ -7,7 +7,6 @@ import 'package:path/path.dart' show join;
 class FileManager {
   final Directory logDir;
   final DateFormat filenameFormatter;
-  final int? maxFileSizeMB;
   final int? maxLogAgeDays;
 
   late File _logFile;
@@ -16,7 +15,6 @@ class FileManager {
   FileManager({
     required this.logDir,
     required this.filenameFormatter,
-    this.maxFileSizeMB,
     this.maxLogAgeDays,
   }) {
     _initialize();
@@ -51,19 +49,6 @@ class FileManager {
 
   Future<void> write(String message) async {
     _sink?.writeln(message);
-    await _checkFileSize();
-  }
-
-  Future<void> _checkFileSize() async {
-    if (maxFileSizeMB == null || !await _logFile.exists()) return;
-
-    final sizeInBytes = await _logFile.length();
-    final sizeInMB = sizeInBytes / (1024 * 1024);
-
-    if (sizeInMB < maxFileSizeMB!) return;
-
-    await close();
-    _initialize();
   }
 
   Future<void> close() async {

@@ -18,7 +18,6 @@ If no configuration is provided, LogKeeper continues to work exactly as before.
 - Added optional configuration method `LogKeeper.configure()`:
   - `logDirectory`: Custom directory for log files (default: `cwd/logs`)
   - `minLevelForProduction`: Minimum log level for production (default: `LogLevel.info`)
-  - `maxFileSizeMB`: Automatically rotates log files when reaching a size limit (default: no limit)
   - `fileNameDateFormat`: Custom date format for log file names (default: `yyyy-MM-dd_HH-mm-ss`)
   - `timestampFormat`: Custom date format for log message timestamps (default: `Hms()`)
   - `maxLogAgeDays`: Automatically deletes old log files older than N days (default: disabled)

@@ -90,7 +90,6 @@ Future<void> main() async {
     logDirectory: 'custom_logs', // custom directory for logs
     minLevelForProduction:
         LogLevel.warning, // filter lower levels in production
-    maxFileSizeMB: 5, // auto-rotate files over 5 MB
     fileNameDateFormat: DateFormat('yyyy_MM_dd-HH_mm'),
     timestampFormat: DateFormat('HH:mm:ss.SSS'),
     maxLogAgeDays: 7, // delete logs older than 7 days

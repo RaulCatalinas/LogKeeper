@@ -13,10 +13,9 @@ class LogKeeper {
   Directory _logDir = Directory('logs');
   LogLevel _minLevelForProduction = LogLevel.info;
   bool _writeToFileInDevMode = false;
-  int? _maxFileSizeMB;
   int? _maxLogAgeDays;
 
-  late final FileManager _fileManager;
+  late FileManager _fileManager;
 
   factory LogKeeper() => _instance;
 
@@ -24,7 +23,6 @@ class LogKeeper {
     _fileManager = FileManager(
       logDir: _logDir,
       filenameFormatter: _filenameFormatter,
-      maxFileSizeMB: _maxFileSizeMB,
       maxLogAgeDays: _maxLogAgeDays,
     );
   }
@@ -41,7 +39,6 @@ class LogKeeper {
   }) {
     _instance._logDir = Directory(logDirectory);
     _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
-    _instance._maxFileSizeMB = maxFileSizeMB;
     _instance._maxLogAgeDays = maxLogAgeDays;
     _instance._filenameFormatter =
         fileNameDateFormat ?? DateFormat('yyyy-MM-dd_HH-mm-ss');
@@ -51,7 +48,7 @@ class LogKeeper {
     _instance._fileManager = FileManager(
       logDir: _instance._logDir,
       filenameFormatter: _instance._filenameFormatter,
-      maxFileSizeMB: _instance._maxFileSizeMB,
+      maxLogAgeDays: _instance._maxLogAgeDays,
     );
   }
 
@@ -140,7 +137,7 @@ class LogKeeper {
   static Future<void> saveLogs() async => await _instance._fileManager.close();
 
   @visibleForTesting
-  static void resetInstance() async {
+  static Future<void> resetInstance() async {
     await _instance._fileManager.close();
     _instance = LogKeeper._internal();
   }

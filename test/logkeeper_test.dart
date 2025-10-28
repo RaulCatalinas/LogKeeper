@@ -1,7 +1,6 @@
 import 'dart:io' show Directory, File;
 
-import 'package:flutter_test/flutter_test.dart'
-    show expect, setUp, tearDown, test;
+import 'package:flutter_test/flutter_test.dart' show expect, tearDown, test;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:logkeeper/log_level.dart' show LogLevel;
 import 'package:logkeeper/logkeeper.dart' show LogKeeper;
@@ -11,13 +10,13 @@ import 'test_utils.dart' show clearDirectory;
 void main() {
   const testDir = 'test_logs';
 
-  setUp(() async {
-    LogKeeper.resetInstance();
-  });
-
   tearDown(() async {
-    await clearDirectory(testDir);
-    await clearDirectory('logs');
+    await LogKeeper.saveLogs();
+    await LogKeeper.resetInstance();
+    await Future.delayed(const Duration(milliseconds: 500), () async {
+      await clearDirectory('logs');
+      await clearDirectory(testDir);
+    });
   });
 
   // ───────────────────────────────────────────────
@@ -79,25 +78,6 @@ void main() {
 
     expect(content.contains('ERROR: This should appear'), true);
     expect(content.contains('INFO: This should not appear'), false);
-  });
-
-  // ───────────────────────────────────────────────
-  // 4️⃣ FILE ROTATION
-  // ───────────────────────────────────────────────
-  test('rotates files when maxFileSizeMB is reached', () async {
-    LogKeeper.configure(
-      logDirectory: testDir,
-      maxFileSizeMB: 1, // 1 MB
-      writeToFileInDevMode: true,
-    );
-
-    final largeEntry = 'A' * (1024 * 1024); // 1 MB
-    LogKeeper.info(largeEntry);
-    LogKeeper.info('Next log should go to a new file');
-    await LogKeeper.saveLogs();
-
-    final files = Directory(testDir).listSync().whereType<File>().toList();
-    expect(files.isNotEmpty, true);
   });
 
   // ───────────────────────────────────────────────
