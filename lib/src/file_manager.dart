@@ -47,7 +47,7 @@ class FileManager {
     _sink = _logFile.openWrite(mode: FileMode.append, encoding: utf8);
   }
 
-  Future<void> write(String message) async {
+  void write(String message) {
     _sink?.writeln(message);
   }
 

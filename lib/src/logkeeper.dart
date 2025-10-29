@@ -64,7 +64,7 @@ class LogKeeper {
     }
 
     if (shouldWriteToFile) {
-      await _instance._fileManager.write(logEntry);
+      _instance._fileManager.write(logEntry);
     }
   }
 
