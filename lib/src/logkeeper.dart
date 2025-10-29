@@ -31,7 +31,6 @@ class LogKeeper {
   static void configure({
     String logDirectory = 'logs',
     LogLevel? minLevelForProduction,
-    int? maxFileSizeMB,
     int? maxLogAgeDays,
     DateFormat? fileNameDateFormat,
     DateFormat? timestampFormat,
