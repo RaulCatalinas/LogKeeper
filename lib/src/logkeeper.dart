@@ -3,8 +3,8 @@ import 'dart:io' show Directory;
 import 'package:flutter/foundation.dart' show kReleaseMode, visibleForTesting;
 import 'package:intl/intl.dart' show DateFormat;
 
-import 'file_manager.dart';
-import 'log_level.dart';
+import 'file_manager.dart' show FileManager;
+import 'log_level.dart' show LogLevel;
 
 class LogKeeper {
   static LogKeeper _instance = LogKeeper._internal();
@@ -27,7 +27,23 @@ class LogKeeper {
     );
   }
 
-  /// Optional configuration. If not called, sensible defaults are used.
+  /// Optional configuration for LogKeeper.
+  ///
+  /// **Completely optional** - LogKeeper works perfectly with defaults.
+  ///
+  /// ⚠️ **If you use it**: Call as the first line in `main()`, before any logging.
+  ///
+  /// Example:
+  /// ```dart
+  /// void main() async {
+  ///   LogKeeper.configure(
+  ///     logDirectory: 'app_logs',
+  ///     maxLogAgeDays: 7,
+  ///   );
+  ///   LogKeeper.info('App started');
+  ///   await LogKeeper.saveLogs();
+  /// }
+  /// `
   static void configure({
     String logDirectory = 'logs',
     LogLevel? minLevelForProduction,

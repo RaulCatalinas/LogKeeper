@@ -46,128 +46,110 @@
   <h1 id="logkeeper">LogKeeper</h1>
 <p>A simple, plug-and-play file logger for Dart with automatic timestamping and session management.</p>
 <h2 id="features">Features</h2>
-<p>✨ <strong>Zero Configuration</strong> - Works out of the box, no setup required
-📁 <strong>Automatic File Management</strong> - Creates timestamped log files for each session
-⏰ <strong>Built-in Timestamps</strong> - Every log entry includes automatic timestamping
-🎯 <strong>Simple API</strong> - Clean, intuitive methods for different log levels
-💾 <strong>Persistent Logging</strong> - All logs are saved to disk automatically</p>
+<ul>
+<li>✨ <strong>Zero Configuration</strong> - Works out of the box, no setup required</li>
+<li>📁 <strong>Automatic File Management</strong> - Creates timestamped log files for each session</li>
+<li>⏰ <strong>Built-in Timestamps</strong> - Every log entry includes automatic timestamping</li>
+<li>🎯 <strong>Simple API</strong> - Clean, intuitive methods for different log levels</li>
+<li>💾 <strong>Persistent Logging</strong> - All logs are saved to disk automatically</li>
+</ul>
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="installation">Installation</h3>
 <p>Add this to your package's <code>pubspec.yaml</code> file:</p>
 <pre class="language-yaml"><code class="language-yaml">dependencies:
-  logkeeper: ^1.0.0
+  logkeeper: ^1.1.0
 </code></pre>
 <p>Then run:</p>
-<pre class="language-bash"><code class="language-bash">dart pub get
-</code></pre>
-<p>Or with Flutter:</p>
 <pre class="language-bash"><code class="language-bash">flutter pub get
 </code></pre>
-<h3 id="basic-usage">Basic Usage</h3>
+<h3 id="basic-usage-no-configuration-needed">Basic Usage (No Configuration Needed!)</h3>
 <pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
 
 void main() async {
-  // Log different levels of messages
+  // Just start logging - no setup required!
   LogKeeper.info('Application started');
   LogKeeper.warning('Low memory detected');
   LogKeeper.error('Connection failed');
   LogKeeper.critical('System failure');
 
-  // Save and close log file when done
+  // Save logs before exiting
   await LogKeeper.saveLogs();
-}
-</code></pre>
-<h2 id="complete-example">Complete Example</h2>
-<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
-
-Future&lt;void&gt; main() async {
-  LogKeeper.info('Starting application...');
-
-  try {
-    // Your application logic
-    await connectToDatabase();
-    LogKeeper.info('Database connection established');
-
-    await loadUserData();
-    LogKeeper.info('User data loaded successfully');
-
-  } catch (e) {
-    LogKeeper.error('Failed to initialize: $e');
-  } finally {
-    LogKeeper.info('Shutting down application');
-    await LogKeeper.saveLogs();
-  }
-}
-
-Future&lt;void&gt; connectToDatabase() async {
-  // Database connection logic
-}
-
-Future&lt;void&gt; loadUserData() async {
-  // Load user data logic
-}
-</code></pre>
-<h2 id="additional-examples">Additional Examples</h2>
-<h3 id="-zero-config-session-example">🔹 Zero-Config Session Example</h3>
-<p>Demonstrates how LogKeeper automatically manages timestamped sessions
-and creates log files without any setup:</p>
-<pre class="language-dart"><code class="language-dart">import 'package:logkeeper/logkeeper.dart';
-
-Future&lt;void&gt; main() async {
-  LogKeeper.info('Starting new log session');
-  LogKeeper.warning('Cache directory not found, recreating...');
-  LogKeeper.error('Failed to load preferences.json');
-  LogKeeper.critical('Disk nearly full — user intervention required!');
-
-  await LogKeeper.saveLogs();
-  print('✅ Logs saved automatically in the "logs" directory.');
-}
-</code></pre>
-<h2 id="-integration-example">🔹 Integration Example</h2>
-<p>Shows how LogKeeper can be used in a realistic app lifecycle,
-including async operations and error handling:</p>
-<pre class="language-dart"><code class="language-dart">import 'dart:math';
-
-import 'package:logkeeper/logkeeper.dart';
-
-Future&lt;void&gt; main() async {
-  LogKeeper.info('App started');
-  try {
-    await loadConfiguration();
-    await fetchUserData();
-    await performRiskyOperation();
-    LogKeeper.info('All tasks completed successfully');
-  } catch (e, s) {
-    LogKeeper.critical('Unhandled exception: $e\n$s');
-  } finally {
-    await LogKeeper.saveLogs();
-    print('✅ Log file saved in the "logs" directory.');
-  }
-}
-
-Future&lt;void&gt; loadConfiguration() async {
-  LogKeeper.info('Loading configuration...');
-  await Future.delayed(Duration(milliseconds: 500));
-  LogKeeper.warning('Using default configuration (config.json missing)');
-}
-
-Future&lt;void&gt; fetchUserData() async {
-  LogKeeper.info('Fetching user data...');
-  await Future.delayed(Duration(milliseconds: 700));
-  if (Random().nextBool()) {
-    LogKeeper.error('Failed to reach API endpoint — retrying...');
-  }
-}
-
-Future&lt;void&gt; performRiskyOperation() async {
-  LogKeeper.info('Performing risky operation...');
-  await Future.delayed(Duration(milliseconds: 400));
-  if (Random().nextInt(10) &gt; 7) {
-    throw Exception('Critical system failure during operation');
-  }
 }
 </code></pre>
 <p>That's it! LogKeeper will automatically create a <code>logs/</code> directory and save all your logs.</p>
+<h3 id="custom-configuration-optional">Custom Configuration (Optional)</h3>
+<p>If you need to customize LogKeeper's behavior, call <code>configure()</code> <strong>before any logging operations</strong> (as the first line in <code>main()</code>):</p>
+<pre class="language-dart"><code class="language-dart">import 'package:intl/intl.dart';
+import 'package:logkeeper/logkeeper.dart';
+import 'package:logkeeper/log_level.dart';
+
+void main() async {
+  // Optional: customize if needed (call FIRST if you use it)
+  LogKeeper.configure(
+    logDirectory: 'custom_logs',
+    minLevelForProduction: LogLevel.warning,
+    fileNameDateFormat: DateFormat('yyyy_MM_dd-HH_mm'),
+    timestampFormat: DateFormat('HH:mm:ss.SSS'),
+    maxLogAgeDays: 7,
+    writeToFileInDevMode: true,
+  );
+
+  // Now log as usual
+  LogKeeper.info('Application started with custom config');
+  
+  await LogKeeper.saveLogs();
+}
+</code></pre>
+<h2 id="configuration-options">Configuration Options</h2>
+<p><strong>All parameters are optional</strong> - defaults work great for most cases:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logDirectory</code></td>
+<td><code>String</code></td>
+<td><code>'logs'</code></td>
+<td>Directory where log files are saved</td>
+</tr>
+<tr>
+<td><code>minLevelForProduction</code></td>
+<td><code>LogLevel</code></td>
+<td><code>LogLevel.info</code></td>
+<td>Minimum level to log in production</td>
+</tr>
+<tr>
+<td><code>maxLogAgeDays</code></td>
+<td><code>int?</code></td>
+<td><code>null</code></td>
+<td>Auto-delete logs older than N days</td>
+</tr>
+<tr>
+<td><code>fileNameDateFormat</code></td>
+<td><code>DateFormat</code></td>
+<td><code>yyyy-MM-dd_HH-mm-ss</code></td>
+<td>Format for log file names</td>
+</tr>
+<tr>
+<td><code>timestampFormat</code></td>
+<td><code>DateFormat</code></td>
+<td><code>HH:mm:ss</code></td>
+<td>Format for timestamps in entries</td>
+</tr>
+<tr>
+<td><code>writeToFileInDevMode</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Write to file in development mode</td>
+</tr>
+</tbody>
+</table>
 <h2 id="log-levels">Log Levels</h2>
 <p>LogKeeper supports four log levels:</p>
 <table>
@@ -202,21 +184,29 @@ Future&lt;void&gt; performRiskyOperation() async {
 </tbody>
 </table>
 <h2 id="log-file-format">Log File Format</h2>
-<p>Log files are created in the <code>logs/</code> directory with the format:</p>
+<p>Log files are created in the log directory (default: <code>logs/</code>) with timestamps:</p>
 <pre class="language-plaintext"><code class="language-plaintext">logs/
 └── 2025-10-18_14-30-45.log
 </code></pre>
-<p>Each log entry follows this format:</p>
+<p>Each log entry includes automatic timestamps:</p>
 <pre class="language-plaintext"><code class="language-plaintext">[14:30:45] INFO: Application started
 [14:30:46] WARNING: Low memory detected
 [14:30:47] ERROR: Connection failed
 </code></pre>
 <h2 id="best-practices">Best Practices</h2>
 <h3 id="always-save-logs">Always Save Logs</h3>
-<p>Remember to call <code>saveLogs()</code> before your application exits to ensure all logs are written to disk:</p>
+<p>Call <code>saveLogs()</code> before your application exits to ensure all logs are written to disk:</p>
 <pre class="language-dart"><code class="language-dart">void main() async {
   LogKeeper.info('App started');
   // ... your code ...
+  await LogKeeper.saveLogs();  // Don't forget!
+}
+</code></pre>
+<h3 id="if-you-use-configure-call-it-first">If You Use configure(), Call It First</h3>
+<p>Configuration is <strong>optional</strong>, but if you do use it, call it before logging:</p>
+<pre class="language-dart"><code class="language-dart">void main() async {
+  LogKeeper.configure(/* settings */);  // If used, must be first
+  LogKeeper.info('App started');        // Then log normally
   await LogKeeper.saveLogs();
 }
 </code></pre>
@@ -237,12 +227,12 @@ LogKeeper.error('Error');
 LogKeeper.error('Failed to connect to database: connection timeout after 30s');
 </code></pre>
 <h2 id="faq">FAQ</h2>
+<h3 id="do-i-need-to-configure-logkeeper">Do I need to configure LogKeeper?</h3>
+<p><strong>No!</strong> LogKeeper works perfectly without any configuration. The defaults are sensible and work for most applications. Only use <code>configure()</code> if you need custom behavior.</p>
+<h3 id="if-i-do-configure-when-should-i-call-it">If I do configure, when should I call it?</h3>
+<p>If you choose to use <code>configure()</code>, call it as the <strong>first line in <code>main()</code></strong>, before any logging operations.</p>
 <h3 id="where-are-log-files-stored">Where are log files stored?</h3>
-<p>Log files are stored in a <code>logs/</code> directory relative to your application's working directory.</p>
-<h3 id="can-i-change-the-log-directory">Can I change the log directory?</h3>
-<p>Currently, LogKeeper uses a fixed <code>logs/</code> directory. Custom directory support may be added in a future version.</p>
-<h3 id="how-are-log-files-named">How are log files named?</h3>
-<p>Log files use the format <code>yyyy-MM-dd_HH-mm-ss.log</code> based on when the logger is initialized.</p>
+<p>By default, log files are stored in a <code>logs/</code> directory relative to your application's working directory. You can customize this with the <code>logDirectory</code> parameter.</p>
 <h3 id="what-happens-if-i-dont-call-savelogs">What happens if I don't call <code>saveLogs()</code>?</h3>
 <p>Some log entries may not be written to disk as they remain in the buffer. Always call <code>saveLogs()</code> before exiting.</p>
 <h2 id="contributing">Contributing</h2>

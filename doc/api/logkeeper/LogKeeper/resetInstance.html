@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the saveLogs method from the LogKeeper class, for the Dart programming language.">
-  <title>saveLogs method - LogKeeper class - logkeeper library - Dart API</title>
+  <meta name="description" content="API docs for the resetInstance method from the LogKeeper class, for the Dart programming language.">
+  <title>resetInstance method - LogKeeper class - logkeeper library - Dart API</title>
 
 
   
@@ -27,9 +27,9 @@
     <li><a href="../../index.html">logkeeper</a></li>
     <li><a href="../../logkeeper/">logkeeper.dart</a></li>
     <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">saveLogs static method</li>
+    <li class="self-crumb">resetInstance static method</li>
   </ol>
-  <div class="self-name">saveLogs</div>
+  <div class="self-name">resetInstance</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -49,38 +49,33 @@
     data-above-sidebar="logkeeper&#47;LogKeeper-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">saveLogs</span> static method 
+<h1><span class="kind-method">resetInstance</span> static method 
 </h1></div>
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/widgets/visibleForTesting-constant.html">visibleForTesting</a></li>
+    </ol>
+  </div>
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">saveLogs</span>(<wbr>)
+<span class="name ">resetInstance</span>(<wbr>)
 
       
 
     </section>
     
-<section class="desc markdown">
-  <p>Flushes and closes the log file.</p>
-<p>This method should be called when you're done logging, typically before the application exits.</p>
-<p>It ensures all buffered log entries are written to disk and the file handle is properly closed.</p>
-<p>Example:</p>
-<pre class="language-dart"><code class="language-dart"> void main() async {
-   LogKeeper.info('Application starting');
-   // ... application logic ...
-   LogKeeper.info('Application shutting down');
-   await LogKeeper.saveLogs();
- }
-</code></pre>
-<p>Returns a <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a> that completes when the log file has been flushed and closed.</p>
-</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; saveLogs() async =&gt; await _instance._fileManager.close();</code></pre>
+  <pre class="language-dart"><code class="language-dart">@visibleForTesting
+static Future&lt;void&gt; resetInstance() async {
+  await _instance._fileManager.close();
+  _instance = LogKeeper._internal();
+}</code></pre>
 </section>
 
 
@@ -96,7 +91,7 @@
     <li><a href="../../index.html">logkeeper</a></li>
     <li><a href="../../logkeeper/">logkeeper</a></li>
     <li><a href="../../logkeeper/LogKeeper-class.html">LogKeeper</a></li>
-    <li class="self-crumb">saveLogs static method</li>
+    <li class="self-crumb">resetInstance static method</li>
 </ol>
 
     <h5>LogKeeper class</h5>

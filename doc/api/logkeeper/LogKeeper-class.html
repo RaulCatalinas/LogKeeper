@@ -163,14 +163,14 @@
     <h2>Static Methods</h2>
     <dl class="callables">
         <dt id="configure" class="callable">
-  <span class="name"><a href="../logkeeper/LogKeeper/configure.html">configure</a></span><span class="signature">(<wbr>{<span class="parameter" id="configure-param-logDirectory"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">logDirectory</span> = <span class="default-value">&#39;logs&#39;</span>, </span><span class="parameter" id="configure-param-minLevelForProduction"><span class="type-annotation"><a href="../log_level/LogLevel.html">LogLevel</a>?</span> <span class="parameter-name">minLevelForProduction</span>, </span><span class="parameter" id="configure-param-maxFileSizeMB"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxFileSizeMB</span>, </span><span class="parameter" id="configure-param-maxLogAgeDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxLogAgeDays</span>, </span><span class="parameter" id="configure-param-fileNameDateFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">fileNameDateFormat</span>, </span><span class="parameter" id="configure-param-timestampFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">timestampFormat</span>, </span><span class="parameter" id="configure-param-writeToFileInDevMode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">writeToFileInDevMode</span></span>})
+  <span class="name"><a href="../logkeeper/LogKeeper/configure.html">configure</a></span><span class="signature">(<wbr>{<span class="parameter" id="configure-param-logDirectory"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">logDirectory</span> = <span class="default-value">&#39;logs&#39;</span>, </span><span class="parameter" id="configure-param-minLevelForProduction"><span class="type-annotation"><a href="../log_level/LogLevel.html">LogLevel</a>?</span> <span class="parameter-name">minLevelForProduction</span>, </span><span class="parameter" id="configure-param-maxLogAgeDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxLogAgeDays</span>, </span><span class="parameter" id="configure-param-fileNameDateFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">fileNameDateFormat</span>, </span><span class="parameter" id="configure-param-timestampFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">timestampFormat</span>, </span><span class="parameter" id="configure-param-writeToFileInDevMode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">writeToFileInDevMode</span></span>})
     <span class="returntype parameter">&#8594; void</span>
   </span>
   
 
 </dt>
 <dd>
-  Optional configuration. If not called, sensible defaults are used.
+  Optional configuration for LogKeeper.
   
 
 </dd>
@@ -210,6 +210,19 @@
 </dt>
 <dd>
   Logs an informational message.
+  
+
+</dd>
+
+        <dt id="resetInstance" class="callable">
+  <span class="name"><a href="../logkeeper/LogKeeper/resetInstance.html">resetInstance</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
   
 
 </dd>
