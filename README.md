@@ -18,7 +18,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  logkeeper: ^1.0.0
+  logkeeper: ^1.1.0
 ```
 
 Then run:
