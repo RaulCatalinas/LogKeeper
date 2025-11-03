@@ -5,7 +5,7 @@ repository: https://github.com/RaulCatalinas/LogKeeper
 
 environment:
   sdk: ^3.9.2
-  flutter: ">=1.17.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   path: ^1.9.0
