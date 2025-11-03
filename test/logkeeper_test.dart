@@ -12,8 +12,6 @@ void main() {
 
   group('LogKeeper', () {
     tearDown(() async {
-      await LogKeeper.saveLogs();
-      await Future.delayed(Duration(milliseconds: 100));
       await clearDirectory('logs');
       await clearDirectory(testDir);
       await LogKeeper.resetInstance();
