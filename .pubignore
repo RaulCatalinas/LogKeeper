@@ -1,9 +1,9 @@
 .github/
 .dart_tool/
 .vscode/
-test
+test/
 .gitignore
 analysis_options.yaml
-pubspec.lock/
+pubspec.lock
 logs/
 test_logs/
