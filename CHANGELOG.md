@@ -41,3 +41,7 @@ Everything will work exactly the same as in previous versions — no configurati
 ## 1.1.0+1
 
 - Updated documentation.
+
+## 1.1.1
+
+- Unnecessary public method removed

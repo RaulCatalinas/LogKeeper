@@ -14,7 +14,6 @@ void main() {
     tearDown(() async {
       await clearDirectory('logs');
       await clearDirectory(testDir);
-      await LogKeeper.resetInstance();
     });
 
     test('does not write to file in dev mode by default', () async {
