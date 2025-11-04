@@ -24,8 +24,6 @@ void main() async {
   //
   // If you want to customize behavior, call configure()
   // BEFORE any logging operations (first line in main).
-  //
-  // Uncomment this to see custom configuration in action:
 
   LogKeeper.configure(
     logDirectory: 'custom_logs',

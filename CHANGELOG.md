@@ -37,3 +37,7 @@ await LogKeeper.saveLogs();
 ```
 
 Everything will work exactly the same as in previous versions — no configuration required.
+
+## 1.1.0+1
+
+- Updated documentation.
