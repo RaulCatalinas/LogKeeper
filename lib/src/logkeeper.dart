@@ -24,6 +24,7 @@ class LogKeeper {
       logDir: _logDir,
       filenameFormatter: _filenameFormatter,
       maxLogAgeDays: _maxLogAgeDays,
+      createNewFile: kReleaseMode || _writeToFileInDevMode,
     );
   }
 
@@ -64,6 +65,7 @@ class LogKeeper {
       logDir: _instance._logDir,
       filenameFormatter: _instance._filenameFormatter,
       maxLogAgeDays: _instance._maxLogAgeDays,
+      createNewFile: kReleaseMode || _instance._writeToFileInDevMode,
     );
   }
 

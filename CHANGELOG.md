@@ -45,3 +45,9 @@ Everything will work exactly the same as in previous versions — no configurati
 ## 1.1.0+2
 
 - Unnecessary public method removed
+
+## 1.1.1
+
+### Fix
+
+- Fixed unnecessary `.log` file creation in development mode

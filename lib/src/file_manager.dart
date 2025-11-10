@@ -1,4 +1,3 @@
-import 'dart:convert' show utf8;
 import 'dart:io' show Directory, File, FileMode, IOSink;
 
 import 'package:intl/intl.dart' show DateFormat;
@@ -8,6 +7,7 @@ class FileManager {
   final Directory logDir;
   final DateFormat filenameFormatter;
   final int? maxLogAgeDays;
+  final bool createNewFile;
 
   late File _logFile;
   IOSink? _sink;
@@ -15,6 +15,7 @@ class FileManager {
   FileManager({
     required this.logDir,
     required this.filenameFormatter,
+    required this.createNewFile,
     this.maxLogAgeDays,
   }) {
     _initialize();
@@ -25,8 +26,8 @@ class FileManager {
     if (maxLogAgeDays == null || !await logDir.exists()) return;
 
     final files = logDir.listSync().whereType<File>().where(
-      (f) => f.path.endsWith('.log'),
-    );
+          (f) => f.path.endsWith('.log'),
+        );
 
     final now = DateTime.now();
 
@@ -41,10 +42,12 @@ class FileManager {
   }
 
   void _initialize() {
+    if (!createNewFile) return;
+
     final filename = filenameFormatter.format(DateTime.now());
     _logFile = File(join(logDir.path, '$filename.log'));
     _logFile.createSync(recursive: true);
-    _sink = _logFile.openWrite(mode: FileMode.append, encoding: utf8);
+    _sink = _logFile.openWrite(mode: FileMode.append);
   }
 
   void write(String message) {
