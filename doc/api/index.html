@@ -57,7 +57,7 @@
 <h3 id="installation">Installation</h3>
 <p>Add this to your package's <code>pubspec.yaml</code> file:</p>
 <pre class="language-yaml"><code class="language-yaml">dependencies:
-  logkeeper: ^1.1.0
+  logkeeper: ^1.2.0
 </code></pre>
 <p>Then run:</p>
 <pre class="language-bash"><code class="language-bash">flutter pub get
@@ -92,6 +92,7 @@ void main() async {
     timestampFormat: DateFormat('HH:mm:ss.SSS'),
     maxLogAgeDays: 7,
     writeToFileInDevMode: true,
+    colorizeConsoleOutput: false,
   );
 
   // Now log as usual
@@ -147,6 +148,12 @@ void main() async {
 <td><code>bool</code></td>
 <td><code>false</code></td>
 <td>Write to file in development mode</td>
+</tr>
+<tr>
+<td><code>colorizeConsoleOutput</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Colorize the logs displayed by the console</td>
 </tr>
 </tbody>
 </table>
@@ -291,7 +298,7 @@ LogKeeper.error('Failed to connect to database: connection timeout after 30s');
 <footer>
   <span class="no-break">
     logkeeper
-      1.1.0+1
+      1.2.0
   </span>
   
 </footer>

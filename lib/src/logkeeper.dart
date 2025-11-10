@@ -3,6 +3,7 @@ import 'dart:io' show Directory;
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'constants.dart' show colorMap, resetColor;
 import 'file_manager.dart' show FileManager;
 import 'log_level.dart' show LogLevel;
 
@@ -14,6 +15,7 @@ class LogKeeper {
   LogLevel _minLevelForProduction = LogLevel.info;
   bool _writeToFileInDevMode = false;
   int? _maxLogAgeDays;
+  bool colorizeConsoleOutput = true;
 
   late FileManager _fileManager;
 
@@ -52,6 +54,7 @@ class LogKeeper {
     DateFormat? fileNameDateFormat,
     DateFormat? timestampFormat,
     bool? writeToFileInDevMode,
+    bool? colorizeConsoleOutput,
   }) {
     _instance._logDir = Directory(logDirectory);
     _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
@@ -60,6 +63,7 @@ class LogKeeper {
         fileNameDateFormat ?? DateFormat('yyyy-MM-dd_HH-mm-ss');
     _instance._timestampFormatter = timestampFormat ?? DateFormat.Hms();
     _instance._writeToFileInDevMode = writeToFileInDevMode ?? false;
+    _instance.colorizeConsoleOutput = colorizeConsoleOutput ?? true;
 
     _instance._fileManager = FileManager(
       logDir: _instance._logDir,
@@ -78,12 +82,20 @@ class LogKeeper {
         : _instance._writeToFileInDevMode;
 
     if (!kReleaseMode) {
-      print(logEntry);
+      print(
+        _instance.colorizeConsoleOutput
+            ? _colorize(message: logEntry, level: level)
+            : logEntry,
+      );
     }
 
     if (shouldWriteToFile) {
       _instance._fileManager.write(logEntry);
     }
+  }
+
+  static String _colorize({required String message, required LogLevel level}) {
+    return '${colorMap[level]}$message$resetColor';
   }
 
   /// Logs an informational message.

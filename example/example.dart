@@ -32,6 +32,7 @@ void main() async {
     timestampFormat: DateFormat('HH:mm:ss.SSS'),
     maxLogAgeDays: 7,
     writeToFileInDevMode: true,
+    colorizeConsoleOutput: false,
   );
 
   LogKeeper.info('More logging examples');

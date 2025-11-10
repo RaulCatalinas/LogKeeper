@@ -18,7 +18,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  logkeeper: ^1.1.0
+  logkeeper: ^1.2.0
 ```
 
 Then run:
@@ -64,6 +64,7 @@ void main() async {
     timestampFormat: DateFormat('HH:mm:ss.SSS'),
     maxLogAgeDays: 7,
     writeToFileInDevMode: true,
+    colorizeConsoleOutput: false,
   );
 
   // Now log as usual
@@ -85,6 +86,7 @@ void main() async {
 | `fileNameDateFormat` | `DateFormat` | `yyyy-MM-dd_HH-mm-ss` | Format for log file names |
 | `timestampFormat` | `DateFormat` | `HH:mm:ss` | Format for timestamps in entries |
 | `writeToFileInDevMode` | `bool` | `false` | Write to file in development mode |
+| `colorizeConsoleOutput` | `bool` | `true` | Colorize the logs displayed by the console |
 
 ## Log Levels
 

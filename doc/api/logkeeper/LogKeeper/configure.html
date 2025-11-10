@@ -61,6 +61,7 @@
 <li><span class="parameter" id="configure-param-fileNameDateFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">fileNameDateFormat</span>, </span></li>
 <li><span class="parameter" id="configure-param-timestampFormat"><span class="type-annotation"><a href="https://pub.dev/documentation/intl/0.20.2/intl/DateFormat-class.html">DateFormat</a>?</span> <span class="parameter-name">timestampFormat</span>, </span></li>
 <li><span class="parameter" id="configure-param-writeToFileInDevMode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">writeToFileInDevMode</span>, </span></li>
+<li><span class="parameter" id="configure-param-colorizeConsoleOutput"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">colorizeConsoleOutput</span>, </span></li>
 </ol>})
 
       
@@ -95,6 +96,7 @@
   DateFormat? fileNameDateFormat,
   DateFormat? timestampFormat,
   bool? writeToFileInDevMode,
+  bool? colorizeConsoleOutput,
 }) {
   _instance._logDir = Directory(logDirectory);
   _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
@@ -103,11 +105,13 @@
       fileNameDateFormat ?? DateFormat(&#39;yyyy-MM-dd_HH-mm-ss&#39;);
   _instance._timestampFormatter = timestampFormat ?? DateFormat.Hms();
   _instance._writeToFileInDevMode = writeToFileInDevMode ?? false;
+  _instance.colorizeConsoleOutput = colorizeConsoleOutput ?? true;
 
   _instance._fileManager = FileManager(
     logDir: _instance._logDir,
     filenameFormatter: _instance._filenameFormatter,
     maxLogAgeDays: _instance._maxLogAgeDays,
+    createNewFile: kReleaseMode || _instance._writeToFileInDevMode,
   );
 }</code></pre>
 </section>
@@ -137,7 +141,7 @@
 <footer>
   <span class="no-break">
     logkeeper
-      1.1.0+1
+      1.2.0
   </span>
   
 </footer>
