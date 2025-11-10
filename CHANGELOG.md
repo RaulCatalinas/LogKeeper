@@ -51,3 +51,11 @@ Everything will work exactly the same as in previous versions — no configurati
 ### Fix
 
 - Fixed unnecessary `.log` file creation in development mode
+
+## 1.2.0
+
+### Added
+
+- **colorizeConsoleOutput**: Colorized console output for better log readability
+  - Log levels now have distinct colors for easier visual identification
+  - Colors can be disabled via configuration option
