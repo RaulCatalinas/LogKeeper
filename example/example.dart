@@ -40,8 +40,23 @@ void main() async {
   LogKeeper.error('Simulated error event');
   LogKeeper.critical('Simulated critical issue');
 
+  // ─────────────────────────────────────────────
+  // 3️⃣ LOG DIRECTORY PATH (OPTIONAL)
+  // ─────────────────────────────────────────────
+  //
+  // Use LogKeeper.ensureLogDirectoryPath() when you need a non-null absolute
+  // path before relying on other code paths. It initializes the same internal
+  // state as the first log line would (safe to call multiple times).
+  final logDirAbsolute = await LogKeeper.ensureLogDirectoryPath();
+  print('Log directory (from ensure): $logDirAbsolute');
+
+  // LogKeeper.logDirectoryPath is a synchronous read of that folder once it
+  // exists—after LogKeeper.configure with logDirectory, after
+  // ensureLogDirectoryPath, or after at least one log call.
+  print('Log directory (getter): ${LogKeeper.logDirectoryPath}');
+
   // ─────────────────────────────
-  // 3️⃣ CLEANUP AND SHUTDOWN
+  // 4️⃣ CLEANUP AND SHUTDOWN
   // ─────────────────────────────
   //
   // Always call saveLogs() before exiting

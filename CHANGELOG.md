@@ -59,3 +59,14 @@ Everything will work exactly the same as in previous versions — no configurati
 - **colorizeConsoleOutput**: Colorized console output for better log readability
   - Log levels now have distinct colors for easier visual identification
   - Colors can be disabled via configuration option
+
+## 1.3.0
+
+### Fix
+
+- Resolved `FileSystemException: Creation failed, path = 'logs' (OS Error: Read-only file system, errno = 30)` on Android and other environments where the process working directory is not writable. The default log directory is now created under the application support directory from `path_provider` instead of a relative `logs` folder next to the current working directory.
+
+### Added
+
+- **`LogKeeper.logDirectoryPath`**: read-only getter that returns the absolute directory where log files are written. It is `null` until a custom directory is set with `configure`, or until `ensureLogDirectoryPath` or the first log write initializes the default support-directory `logs` folder.
+- **`LogKeeper.ensureLogDirectoryPath()`**: returns a `Future<String>` with that same absolute path and guarantees initialization (including the internal file manager) without requiring a prior log call. Prefer this when you need a non-null path before any logging.

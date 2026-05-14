@@ -2,6 +2,9 @@ import 'dart:io' show Directory;
 
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart'
+    show getApplicationSupportDirectory;
 
 import 'constants.dart' show colorMap, resetColor;
 import 'file_manager.dart' show FileManager;
@@ -11,23 +14,33 @@ class LogKeeper {
   static final LogKeeper _instance = LogKeeper._internal();
   DateFormat _timestampFormatter = DateFormat.Hms();
   DateFormat _filenameFormatter = DateFormat('yyyy-MM-dd_HH-mm-ss');
-  Directory _logDir = Directory('logs');
+  Directory? _logDir;
   LogLevel _minLevelForProduction = LogLevel.info;
   bool _writeToFileInDevMode = false;
   int? _maxLogAgeDays;
-  bool colorizeConsoleOutput = true;
-
-  late FileManager _fileManager;
+  bool _colorizeConsoleOutput = true;
+  FileManager? _fileManager;
 
   factory LogKeeper() => _instance;
 
-  LogKeeper._internal() {
-    _fileManager = FileManager(
-      logDir: _logDir,
-      filenameFormatter: _filenameFormatter,
-      maxLogAgeDays: _maxLogAgeDays,
-      createNewFile: kReleaseMode || _writeToFileInDevMode,
-    );
+  LogKeeper._internal();
+
+  /// Absolute filesystem path of the directory where log files are written.
+  ///
+  /// Returns `null` until [configure] sets `logDirectory`, or until
+  /// [ensureLogDirectoryPath] or the first log write initializes the default
+  /// application support `logs` folder.
+  static String? get logDirectoryPath => _instance._logDir?.absolute.path;
+
+  /// Resolves the log directory and returns its absolute path.
+  ///
+  /// Unlike [logDirectoryPath], this never returns null: if no directory was
+  /// configured yet, it awaits the default application support `logs` folder
+  /// and initializes the internal [FileManager] the same way the first log
+  /// write would.
+  static Future<String> ensureLogDirectoryPath() async {
+    await _ensureInitialized();
+    return _instance._logDir!.absolute.path;
   }
 
   /// Optional configuration for LogKeeper.
@@ -48,7 +61,7 @@ class LogKeeper {
   /// }
   /// `
   static void configure({
-    String logDirectory = 'logs',
+    String? logDirectory,
     LogLevel? minLevelForProduction,
     int? maxLogAgeDays,
     DateFormat? fileNameDateFormat,
@@ -56,24 +69,32 @@ class LogKeeper {
     bool? writeToFileInDevMode,
     bool? colorizeConsoleOutput,
   }) {
-    _instance._logDir = Directory(logDirectory);
+    if (logDirectory != null) {
+      _instance._logDir = Directory(logDirectory);
+    }
+
     _instance._minLevelForProduction = minLevelForProduction ?? LogLevel.info;
     _instance._maxLogAgeDays = maxLogAgeDays;
     _instance._filenameFormatter =
         fileNameDateFormat ?? DateFormat('yyyy-MM-dd_HH-mm-ss');
     _instance._timestampFormatter = timestampFormat ?? DateFormat.Hms();
     _instance._writeToFileInDevMode = writeToFileInDevMode ?? false;
-    _instance.colorizeConsoleOutput = colorizeConsoleOutput ?? true;
+    _instance._colorizeConsoleOutput = colorizeConsoleOutput ?? true;
+  }
 
-    _instance._fileManager = FileManager(
-      logDir: _instance._logDir,
+  static Future<void> _ensureInitialized() async {
+    _instance._logDir ??= await _getDefaultLogsDir();
+    _instance._fileManager ??= FileManager(
+      logDir: _instance._logDir!,
       filenameFormatter: _instance._filenameFormatter,
       maxLogAgeDays: _instance._maxLogAgeDays,
       createNewFile: kReleaseMode || _instance._writeToFileInDevMode,
     );
   }
 
-  static void _writeLog(LogLevel level, String message) async {
+  static Future<void> _writeLog(LogLevel level, String message) async {
+    await _ensureInitialized();
+
     final timestamp = _instance._timestampFormatter.format(DateTime.now());
     final logEntry = '[$timestamp] ${level.toString()}: $message';
 
@@ -83,14 +104,14 @@ class LogKeeper {
 
     if (!kReleaseMode) {
       print(
-        _instance.colorizeConsoleOutput
+        _instance._colorizeConsoleOutput
             ? _colorize(message: logEntry, level: level)
             : logEntry,
       );
     }
 
     if (shouldWriteToFile) {
-      _instance._fileManager.write(logEntry);
+      _instance._fileManager!.write(logEntry);
     }
   }
 
@@ -163,5 +184,11 @@ class LogKeeper {
   /// ```
   ///
   /// Returns a [Future] that completes when the log file has been flushed and closed.
-  static Future<void> saveLogs() async => await _instance._fileManager.close();
+  static Future<void> saveLogs() async => await _instance._fileManager!.close();
+
+  static Future<Directory> _getDefaultLogsDir() async {
+    final dir = await getApplicationSupportDirectory();
+
+    return Directory(join(dir.path, 'logs'));
+  }
 }

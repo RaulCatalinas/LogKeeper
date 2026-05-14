@@ -18,7 +18,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  logkeeper: ^1.2.0
+  logkeeper: ^1.3.0
 ```
 
 Then run:
@@ -80,7 +80,7 @@ void main() async {
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `logDirectory` | `String` | `'logs'` | Directory where log files are saved |
+| `logDirectory` | `String?` | `null` | Directory where log files are saved |
 | `minLevelForProduction` | `LogLevel` | `LogLevel.info` | Minimum level to log in production |
 | `maxLogAgeDays` | `int?` | `null` | Auto-delete logs older than N days |
 | `fileNameDateFormat` | `DateFormat` | `yyyy-MM-dd_HH-mm-ss` | Format for log file names |

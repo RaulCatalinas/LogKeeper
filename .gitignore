@@ -5,3 +5,4 @@ build/
 test_logs/
 logs/
 .flutter-plugins-dependencies
+doc/
