@@ -1,13 +1,21 @@
 import 'dart:io' show Directory, File;
 
 import 'package:flutter_test/flutter_test.dart'
-    show expect, tearDown, test, group, isTrue, isFalse;
+    show
+        TestWidgetsFlutterBinding,
+        expect,
+        group,
+        isFalse,
+        isTrue,
+        tearDown,
+        test;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:logkeeper/logkeeper.dart' show LogKeeper;
 
 import 'test_utils.dart' show clearDirectory;
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   const testDir = 'test_logs';
 
   group('LogKeeper', () {

@@ -184,7 +184,7 @@ class LogKeeper {
   /// ```
   ///
   /// Returns a [Future] that completes when the log file has been flushed and closed.
-  static Future<void> saveLogs() async => await _instance._fileManager!.close();
+  static Future<void> saveLogs() async => await _instance._fileManager?.close();
 
   static Future<Directory> _getDefaultLogsDir() async {
     final dir = await getApplicationSupportDirectory();
