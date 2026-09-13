@@ -76,3 +76,13 @@ Everything will work exactly the same as in previous versions — no configurati
 ### Added
 
 - **`LogKeeper.flushLogs()`**: writes buffered log entries to disk without closing the underlying file sink, unlike `saveLogs()`. Safe to call as many times as needed throughout an app's lifetime — intended for apps that pass through background/foreground repeatedly during a single session (e.g. most mobile apps), where calling `saveLogs()` more than once would throw since the sink is already closed. Use `saveLogs()` only once, right before the app truly exits.
+
+### Changed
+
+- `LogKeeper.configure()` now only has effect the first time it's called, before any log write. Calling it again afterward is ignored (with a warning logged) instead of silently updating internal settings without recreating the underlying file manager, which previously left behavior inconsistent with what was actually configured.
+
+### Fixed
+
+- Fixed a race condition where a log call (`info`/`warning`/`error`/`critical`) immediately followed by `saveLogs()` or `flushLogs()` could close or flush the file sink before the log entry had actually been written, throwing `Bad state: StreamSink is bound to a stream`. Writes are now processed through an internal ordered queue, so `saveLogs()`/`flushLogs()` always wait for all previously requested writes to complete first — no `await` needed on the logging calls themselves.
+- Fixed a race condition in `FileManager` where old-log cleanup (`maxLogAgeDays`) ran asynchronously inside the constructor without being awaited, so the file manager could be considered ready before cleanup had actually finished.
+- A single failed log write no longer breaks all subsequent writes for the rest of the session — errors are now contained per write instead of propagating through the internal write queue.
